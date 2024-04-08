@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:btc_miner/btc_miner.dart' as btc_miner;
 import 'package:btc_miner_example/miner.dart';
 import 'package:btc_miner_example/utils.dart';
@@ -18,7 +16,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late String sumResult;
   // late Future<int> sumAsyncResult;
 
   bool mining = false;
@@ -36,7 +33,6 @@ class _MyAppState extends State<MyApp> {
     blockTemplate = await rpcClient.getBlockTemplate();
 
     if (blockTemplate == null) {
-      inspect('Failed to get block template');
       setState(() {
         logger.add('Failed to get block template');
         mining = false;
@@ -48,12 +44,11 @@ class _MyAppState extends State<MyApp> {
     final headerHexAndTargetHex = miner.getBlockHeaderHex(blockTemplate!, coinbaseMessage.codeUnits, address);
 
     if (headerHexAndTargetHex == null) {
-      inspect('Failed to get block header');
       setState(() {
         logger.add('Failed to get block header');
         mining = false;
       });
-      Future.delayed(const Duration(seconds: 0)).then((value) => startMiner());
+      // Future.delayed(const Duration(seconds: 0)).then((value) => startMiner());
       return;
     }
     final pointer = btc_miner.minerHeader(headerHexAndTargetHex['headerHex']!.toNativeUtf8().cast(), headerHexAndTargetHex['targetHex']!.toNativeUtf8().cast());
@@ -69,14 +64,14 @@ class _MyAppState extends State<MyApp> {
         logger.add(resultSubmit.toString());
         mining = false;
       });
-      Future.delayed(const Duration(seconds: 0)).then((value) => startMiner());
+      // Future.delayed(const Duration(seconds: 0)).then((value) => startMiner());
       return;
     }
     setState(() {
-      logger.add(blockHeader);
+      logger.add(nonceAndHeaderHex);
       mining = false;
     });
-    Future.delayed(const Duration(seconds: 0)).then((value) => startMiner());
+    // Future.delayed(const Duration(seconds: 0)).then((value) => startMiner());
   }
 
   void calculateHashPerSeconds() {
