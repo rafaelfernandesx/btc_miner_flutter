@@ -27,31 +27,34 @@ class BtcMinerBindings {
           lookup)
       : _lookup = lookup;
 
-  /// A very short-lived native function.
-  ///
-  /// For very short-lived functions, it is fine to call them on the main isolate.
-  /// They will block the Dart execution while running the native function, so
-  /// only do this for native functions which are guaranteed to be short-lived.
-  int sum(
-    int a,
-    int b,
+  ffi.Pointer<ffi.Char> minerHeader(
+    ffi.Pointer<ffi.Char> headerHex,
+    ffi.Pointer<ffi.Char> targetHex,
   ) {
-    return _sum(
-      a,
-      b,
+    return _minerHeader(
+      headerHex,
+      targetHex,
     );
   }
 
-  late final _sumPtr =
-      _lookup<ffi.NativeFunction<ffi.IntPtr Function(ffi.IntPtr, ffi.IntPtr)>>(
-          'sum');
-  late final _sum = _sumPtr.asFunction<int Function(int, int)>();
+  late final _minerHeaderPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>>('minerHeader');
+  late final _minerHeader = _minerHeaderPtr.asFunction<
+      ffi.Pointer<ffi.Char> Function(
+          ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>)>();
 
-  /// A longer lived native function, which occupies the thread calling it.
-  ///
-  /// Do not call these kind of native functions in the main isolate. They will
-  /// block Dart execution. This will cause dropped frames in Flutter applications.
-  /// Instead, call these native functions on a separate isolate.
+  ffi.Pointer<ffi.Char> calculateHashPerSeconds() {
+    return _calculateHashPerSeconds();
+  }
+
+  late final _calculateHashPerSecondsPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+          'calculateHashPerSeconds');
+  late final _calculateHashPerSeconds = _calculateHashPerSecondsPtr
+      .asFunction<ffi.Pointer<ffi.Char> Function()>();
+
   int sum_long_running(
     int a,
     int b,

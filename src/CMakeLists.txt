@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.10)
 project(btc_miner_library VERSION 0.0.1 LANGUAGES C)
 
 add_library(btc_miner SHARED
-  "btc_miner.c"
+  "btc_miner.cpp"
 )
 
 set_target_properties(btc_miner PROPERTIES

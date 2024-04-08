@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:ffi';
 import 'dart:io';
@@ -11,7 +10,8 @@ import 'btc_miner_bindings_generated.dart';
 /// For very short-lived functions, it is fine to call them on the main isolate.
 /// They will block the Dart execution while running the native function, so
 /// only do this for native functions which are guaranteed to be short-lived.
-int sum(int a, int b) => _bindings.sum(a, b);
+Pointer<Char> calculateHashPerSeconds() => _bindings.calculateHashPerSeconds();
+Pointer<Char> minerHeader(Pointer<Char> headerHex, Pointer<Char> targetHex) => _bindings.minerHeader(headerHex, targetHex);
 
 /// A longer lived native function, which occupies the thread calling it.
 ///
@@ -51,7 +51,6 @@ final DynamicLibrary _dylib = () {
 
 /// The bindings to the native functions in [_dylib].
 final BtcMinerBindings _bindings = BtcMinerBindings(_dylib);
-
 
 /// A request to compute `sum`.
 ///
